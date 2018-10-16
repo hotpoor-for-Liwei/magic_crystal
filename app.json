@@ -1,0 +1,14 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/room/index",
+    "pages/setting/index",
+    "pages/logs/logs"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#ff6601",
+    "navigationBarTitleText": "魔晶",
+    "navigationBarTextStyle":"#fff"
+  }
+}
