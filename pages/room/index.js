@@ -10,7 +10,8 @@ Page({
     motto: 'Coming soon...\r\n即将上线',
     userInfo: {},
     hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    inputMarBot:false,
   },
   //事件处理函数
   onLoad: function (option) {
@@ -52,6 +53,46 @@ Page({
     wx.setNavigationBarTitle({
       title:room_title
     })
+    console.log(app.globalData.wss)
+    if (app.globalData.wss==true){
+
+    }else{
+      wx.closeSocket({
+        success:res=>{
+          console.log("success closeSocket")
+        },
+        fail:res=>{
+          console.log("fail closeSocket")
+        }
+      })
+    }
+    wx.connectSocket({
+      url: 'wss://www.hotpoor.com/api/data/ws?aim_id=0cd8429c1da249b6935d7eef72d7fc0b',
+      data:{
+        aim_id:'0cd8429c1da249b6935d7eef72d7fc0b'
+      }
+    })
+    wx.onSocketOpen(function (res){
+      app.globalData.wss = true
+      console.log("ws onSocketOpen")
+      console.log(res)
+      var msg_now = ["JOINMOREROOMS", {}, "0cd8429c1da249b6935d7eef72d7fc0b", ["HACKATHON"]]
+      msg_now = JSON.stringify(msg_now)
+      wx.sendSocketMessage({
+        data:msg_now
+      })
+    })
+    wx.onSocketMessage(function(data){
+      console.log(data)
+    })
+    
+    wx.onSocketError(function() {
+      console.log('websocket连接失败！');
+    })
+    wx.onSocketClose(function(res) {
+      console.log('WebSocket 已关闭！')
+    })
+
   },
   getUserInfo: function(e) {
     console.log(e)
@@ -81,6 +122,19 @@ Page({
   },
   error(e) {
     console.log(e.detail)
+  },
+
+   // 评论输入框聚焦时，设置与底部的距离
+  settingMbShow: function () {
+    this.setData({
+      inputMarBot: true
+    })
+  },
+  //  评论输入框失去聚焦时，设置与底部的距离（默认状态）
+  settingMbNoShow: function () {
+    this.setData({
+      inputMarBot: false
+    })
   },
   onShareAppMessage:function (res) {
     return {

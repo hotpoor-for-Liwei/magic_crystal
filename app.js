@@ -80,5 +80,6 @@ App({
     userInfo: null,
     openId:null,
     login:null,
+    wss:false,
   }
 })
